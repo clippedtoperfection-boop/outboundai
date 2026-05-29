@@ -1,1 +1,1 @@
-export { default } from '@/app/sequences/page'
+export {}
