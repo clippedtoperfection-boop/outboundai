@@ -1,1 +1,1 @@
-export { default } from '@/app/calls/page'
+export {}
