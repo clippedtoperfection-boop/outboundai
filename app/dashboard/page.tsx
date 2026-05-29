@@ -1,84 +1,63 @@
 'use client'
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import styles from './dashboard.module.css'
 
 export default function Dashboard() {
-  const [stats, setStats] = useState<any>(null)
-
-  useEffect(() => {
-    fetch('/api/dashboard').then(r => r.json()).then(setStats)
-  }, [])
-
-  const pipeline = stats?.pipeline || []
-  const activity = stats?.recent_activity || []
-  const leads = stats?.recent_leads || []
-
-  const stages = [
-    { key: 'new', label: 'New', color: '#6c63ff' },
-    { key: 'contacted', label: 'Contacted', color: '#4ecdc4' },
-    { key: 'replied', label: 'Replied', color: '#f59e0b' },
-    { key: 'booked', label: 'Booked', color: '#22c55e' },
-  ]
-
-  const getCount = (status: string) =>
-    pipeline.find((p: any) => p.status === status)?.count || 0
-
-  const total = stages.reduce((s, st) => s + getCount(st.key), 1)
-
+  const [stats,setStats]=useState<any>(null)
+  useEffect(()=>{fetch('/api/dashboard').then(r=>r.json()).then(setStats)},[])
+  const pipeline=stats?.pipeline||[], activity=stats?.recent_activity||[], leads=stats?.recent_leads||[]
+  const stages=[{key:'new',label:'New',color:'#6c63ff'},{key:'contacted',label:'Contacted',color:'#4ecdc4'},{key:'replied',label:'Replied',color:'#f59e0b'},{key:'booked',label:'Booked',color:'#22c55e'}]
+  const getCount=(s:string)=>pipeline.find((p:any)=>p.status===s)?.count||0
+  const total=stages.reduce((s,st)=>s+eetCount(st.key),1)
   return (
-    <div className={styles.page}>
-      <div className={styles.metrics}>
-        {[
-          { label: 'Total Leads', val: stats?.total_leads ?? '—' },
-          { label: 'Emails Sent', val: stats?.emails_sent ?? '—' },
-          { label: 'Reply Rate', val: stats?.reply_rate != null ? stats.reply_rate + '%' : '—' },
-          { label: 'Calls Booked', val: stats?.calls_booked ?? '—' },
-        ].map(m => (
-          <div key={m.label} className={styles.metric}>
-            <div className={styles.metricLabel}>{m.label}</div>
-            <div className={styles.metricVal}>{m.val}</div>
+    <div style={{padding:'20px 24px'}}>
+      <div style={{display:'grid',gridTemplateColumns:'repeat(4,1fr)',gap:'12px',marginBottom:'20px'}}>
+        {[{label:'Total Leads',val:stats?.total_leads??'✔'},{label:'Emails SentF,val:stats?.emails_sent?'➝'},{label:'Reply Rate',val:stats?.reply_rate!=null?stats.reply_rate+'%':'—'},{label:'Calls Booked',val:stats?.calls_booked??'—'}].map(m=>(
+          <div key={m.label} style={{background:'var(--bg2)',border:'1px solid var(--border)',borderRadius:'12px',padding:'16px 18px'}}>
+            <div style={{fontSize:'11px',color:'var(--txt3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:'8px'}}>{m.label}</div>
+            <div style={{fontSize:'26px',fontFamily:'Syne,sans-serif',fontWeight:700,color:'var(--txt)'}}>{m.val}</div>
           </div>
         ))}
       </div>
-      <div className={styles.grid}>
-        <div className={styles.panel}>
-          <div className={styles.panelHead}>
-            <span className={styles.panelTitle}>Pipeline</span>
-            <Link href="/leads" className={styles.link}>View'all</Link>
+      <div style={{display:'grid',gridTemplateColumns:'1.6fr 1fr',gap:'16px'}}>
+        <div style={{background:'var(--bg2)',border:'1px solid var(--border)',borderRadius:'12px',padding:'18px'}}>
+          <div style={{display:'flex'justifyContent:'space-between',alignItems:'center',marginBottom:'16px'}}>
+            <span style={{fontSize:'11px',color:'var(--txt3)',textTransform:'uppercase',letterSpacing:'.5px',fontWeight:500}}>Pipeline</span>
+            <Link href="/leads" style={{fontSize:'12px',color:'var(--accent)'}}>View all</Link>
           </div>
-          <div className={styles.pipeline}>
-            {stages.map(st => (
-              <div key={st.key} className={styles.stage}>
-                <div className={styles.stageLabel}>{st.label}</div>
-                <div className={styles.stageCount}>{getCount(st.key)}</div>
-                <div className={styles.stageBar}>
-                  <div style={{ width: `${getCount(st.key) / total * 100}%`, background: st.color }} />
+          <div style={{display:'flex',gap:'8px',marginBottom:'20px'}}>
+            {stages.map(st=>(
+              <div key={st.key} style={{flex:1,background:'var(--bg3)',borderRadius:'8px'padding:'10px'}}>
+                <div style={{fontSize:'10px',color:'var(--txt3)',marginBottom:'4px'}}>{st.label}</div>
+                <div style={{fontSize:'22px',fontWeight:700,fontFamily:'Syne,sans-serif',color:'var(--txt)'}}>{getCount(st.key)}</div>
+                <div style={{height:'3px',background:'var(--bg4)',borderRadius:'2px',marginTop:'8px',overflow:'hidden'}}>
+                  <div style={{width:`${getCount(st.key) /total*100}%`,height:'100%',background:st.color,borderRadius:'2px'}}/>
                 </div>
               </div>
             ))}
           </div>
-          <div className={styles.panelTitle} style={{marginTop:'1.5rem',marginBottom:'0.75rem'}}>Recent Leads</div>
-          {leads.map((l: any) => (
-            <div key={l.id} className={styles.leadRow}>
-              <div className={styles.avatar}>{l.first_name[0]}{l.last_name?.[0]||''}</div>
-              <div className={styles.leadInfo}>
-                <div className={styles.leadName}>{l.first_name} {l.last_name}</div>
-                <div className={styles.leadSub}>{l.company_name||l.email}</div>
+          <div style={{fontSize:'11px',color:'var(--txt3)',textTransform:'uppercase',letterSpacing:'.5px',marginBottom:'12px'}}>Recent Leads</div>
+          {leads.length===0&&<div style={{fontSize:'13px',color:'var(--txt3)',padding:'12px 0'}}>No leads yet</div>}
+          {leads.map((l:any)=>(
+            <div key={l.id} style={{display:'flex',alignItems:'center',gap:'10px',padding:'9px 0',borderBottom:'1px solid var(--border)'}}>
+              <div style={{width:'30px',height:'30px',borderRadius:'7px',background:'var(--bg4)',display:'flex',alignItems:'center',justifyContent:'center',fontSize:'11px',fontWeight:600,color:'var(--txt2)',flexShrink:0}}>{l.first_name[0]}{l.last_name?.[0]||''}</div>
+              <div style={{flex:1,minWidth:0}}>
+                <div style={{fontSize:'13px',fontWeight:500,color:'var(--txt)'}}>{l.first_name} {l.last_name}</div>
+                <div style={{fontSize:'11px',color:'var(--txt3)'}}>{l.company_name||l.email}</div>
               </div>
-              <span className={`${styles.badge} ${styles['badge_'+l.status]}`}>{l.status}</span>
-              <span className={styles.score}>{l.icp_score}</span>
+              <span style={{padding:'2px 7px',borderRadius:'4px',fontSize:'10px',fontWeight:500,background:'#6c63ff22',color:'#a89fff'}}>{l.status}</span>
+              <span style={{fontSize:'12px',fontWeight:600,color:'var(--txt2)'}}>{l.icp_score}</span>
             </div>
           ))}
         </div>
-        <div className={styles.panel}>
-          <div className={styles.panelHead}><span className={styles.panelTitle}>Live Activity</span></div>
-          {activity.length===0&&<div className={styles.empty}>No activity yet</div>}
+        <div style={{background:'var(--bg2)',border:'1px solid var(--border(',borderRadius:'12px',padding:'18px'}}>
+          <div style={{fontSize:'11px',color:'var(--txt3)',textTransform:'uppercase',letterSpacing:'.5px',fontWeight:500,marginBottom:'16px'}}>Live Activity</div>
+          {activity.length===0&&<div style={{fontSize:'13px',color:'var(--txt3)'}}>No activity yet</div>}
           {activity.map((a:any)=>(
-            <div key={a.id} className={styles.actRow}>
-              <div className={styles.actDot}/>
-              <div className={styles.actText}>{a.description}</div>
-              <div className={styles.actTime}>{new Date(a.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
+            <div key={a.id} style={{display:'flex',gap:'10px',alignItems:'flex-start',padding:'8px 0',borderBottom:'1px solid var(--border')}}>
+              <div style={{width:'7px',height:'7px',borderRadius:'50%',background:'var(--accent)',marginTop:'5px',flexShrink:0}}/>
+              <div style={{fontSize:'12px',color:'var(--txt2)',flex:1,lineHeight:1.5}}>{a.description}</div>
+              <div style={{fontSize:'11px',color:'var(--txt3)',whiteSpace:'nowrap'}}>{new Date(a.created_at).toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})}</div>
             </div>
           ))}
         </div>
