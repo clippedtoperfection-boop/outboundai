@@ -1,1 +1,1 @@
-export { default } from '@/app/compose/page'
+export {}
