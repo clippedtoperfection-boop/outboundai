@@ -1,0 +1,24 @@
+.page { padding: 20px 24px; }
+.grid { display: grid; grid-template-columns: 1fr 1.5fr; gap: 16px; }
+.panel { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 18px; }
+.panelTitle { font-size: 11px; color: var(--txt3); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 14px; font-weight: 500; }
+.week { display: grid; grid-template-columns: repeat(5,1fr); gap: 6px; }
+.day { background: var(--bg3); border-radius: 8px; padding: 10px; text-align: center; }
+.dayName { font-size: 10px; color: var(--txt3); text-transform: uppercase; margin-bottom: 4px; }
+.dayNum { font-size: 20px; font-family: 'Syne',sans-serif; font-weight: 700; color: var(--txt); }
+.dayCount { font-size: 11px; margin-top: 3px; }
+.hasCall .dayNum { color: var(--accent); }
+.today { border: 1px solid var(--accent); }
+.progRow { display: flex; justify-content: space-between; margin-bottom: 8px; }
+ .progLabel { font-size: 13px; color: var(--txt2); }
+.progVal { font-size: 16px; font-weight: 700; font-family: 'Syne',sans-serif; color: var(--txt); }
+.progBar { height: 8px; background: var(--bg3); border-radius: 4px; overflow: hidden; }
+.progFill { height: 100%; background: linear-gradient(90deg,#6c63ff,#4ecdc4); transition: width .4s; }
+.progHint { font-size: 11px; color: var(--txt3); margin-top: 6px; }
+.callRow { display: flex; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); }
+.callRow:last-child { border-bottom: none; }
+.callTime { font-size: 12px; font-weight: 500; color: var(--txt2); min-width: 52px; }
+.callName { font-size: 13px; font-weight: 500; color: var(--txt); flex: 1; }
+.callCo { font-size: 11px; color: var(--txt3); }
+.callTag { margin-left: auto; padding: 2px 7px; border-radius: 4px; font-size: 10px; background: #22c55e22; color: #22c55e; }
+.empty { font-size: 13px; color: var(--txt3); padding: 20px 0; }
